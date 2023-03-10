@@ -22,15 +22,22 @@ class MyWindow(QMainWindow,Ui_server):
             self.pushButton_On_And_Off.clicked.connect(self.on_and_off_server)
             self.on_and_off_server()
         if self.start_tcp:
-            self.server.turn_on_server()
-            self.server.tcp_flag=True
-            self.video=threading.Thread(target=self.server.transmission_video)
-            self.video.start()
-            self.instruction=threading.Thread(target=self.server.receive_instruction)
-            self.instruction.start()
-            if self.user_ui:
-                self.pushButton_On_And_Off.setText('Off')
-                self.states.setText('On')
+          for i in range(4): # Work-In-Progress: APH made this into a 'for & try-catch' to deal with network not online when starting at boot
+            try:
+                self.server.turn_on_server()
+                self.server.tcp_flag=True
+                self.video=threading.Thread(target=self.server.transmission_video)
+                self.video.start()
+                self.instruction=threading.Thread(target=self.server.receive_instruction)
+                self.instruction.start()
+                if self.user_ui:
+                    self.pushButton_On_And_Off.setText('Off')
+                    self.states.setText('On')
+            except OSError:
+                import time
+                time.sleep(5)
+            else:
+                break
             
         
         

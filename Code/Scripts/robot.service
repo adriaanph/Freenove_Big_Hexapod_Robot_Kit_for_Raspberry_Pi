@@ -1,0 +1,16 @@
+[Unit]
+Description=Server for Freenove Robot
+After=network.target
+## The following is an attempt to work around server.py which swallows an OSError when IP cannot be obtained. TODO: fix server.py
+## Manually: systemctl enable systemd-networkd-wait-online.service
+#Wants=network-online.target
+#After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/sbin/start-robot.sh
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
+
